@@ -1,37 +1,36 @@
-//import redux
-import { createStore, applyMiddleware } from "redux";
+import { configureStore, createSlice } from "@reduxjs/toolkit";
 
-//but the state is an object // contains the state of the app// which is a object
-const reducerFn = (state = { counter: 0 }, action) => {
-  //check the type of action
-  //if the type is INCREMENT
-  //then return the new state
-  //else return the old state
-  if (action.type === "INCREMENT") {
-    return {
-      ...state,
-      counter: state.counter + 1,
-    };
-  }
+//create a slice
 
-  if (action.type === "DECREMENT") {
-    return {
-      ...state,
-      counter: state.counter - 1,
-    };
-  }
-
-  if (action.type === "ADD") {
-    return {
-      ...state,
-      counter: state.counter + action.payload,
-    };
-  }
-
-  return state;
+const initialState = {
+  counter: 0,
 };
+const counterSlice = createSlice({
+  //name of the slice
+  name: "counter",
+  //initial state
+  initialState,
+  //reducer which are the actions in form of functions
+  reducers: {
+    increment: (state) => {
+      state.counter += 1;
+    },
+    decrement: (state) => {
+      state.counter -= 1;
+    },
+    add: (state, action) => {
+      state.counter += action.payload;
+    },
+  },
+});
 
-//but the store needs a reducer
-const store = createStore(reducerFn);
+//configure the store
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
 
+//export actions
+export const { increment, decrement, add } = counterSlice.actions;
+
+//export the store
 export default store;
